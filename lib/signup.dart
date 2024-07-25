@@ -63,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     cursorColor: Color(0xFF525FE1),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 8,
                   ),
                   Text(
                     'Full Name',
@@ -100,7 +100,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     cursorColor: Color(0xFF525FE1),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 8,
                   ),
                   Text(
                     'New Password',
@@ -137,7 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     cursorColor: Color(0xFF525FE1),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 8,
                   ),
                   Text(
                     'Re-type Password',

@@ -1,3 +1,4 @@
+import 'package:blug/login.dart';
 import 'package:blug/signup.dart';
 import 'package:blug/splash.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,6 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           useMaterial3: true,
         ),
-        home: SignUpPage());
+        home: LoginPage());
   }
 }

@@ -1,3 +1,4 @@
+import 'package:blug/forgotpage.dart';
 import 'package:blug/login.dart';
 import 'package:blug/signup.dart';
 import 'package:blug/splash.dart';
@@ -20,6 +21,6 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           useMaterial3: true,
         ),
-        home: LoginPage());
+        home: ForgotPaasswordPage());
   }
 }

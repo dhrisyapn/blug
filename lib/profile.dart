@@ -142,40 +142,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Column(
                       children: [
-                        Image.asset('assets/circle.png'),
+                        Image.asset(
+                          'assets/circle.png',
+                          height: 90,
+                        ),
                       ],
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Dhrisya P N',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 24,
-                              fontFamily: 'Alumni Sans',
-                              fontWeight: FontWeight.w300,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dhrisya P N',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontFamily: 'Alumni Sans',
+                            fontWeight: FontWeight.w300,
                           ),
-                          Text(
-                            '@dhrisyapn',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFFFF6B00),
-                              fontSize: 19,
-                              fontFamily: 'Alumni Sans',
-                              fontWeight: FontWeight.w300,
-                              height: 0.04,
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Text(
+                          '@dhrisyapn',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFFFF6B00),
+                            fontSize: 19,
+                            fontFamily: 'Alumni Sans',
+                            fontWeight: FontWeight.w300,
+                            height: 0.04,
+                          ),
+                        )
+                      ],
                     ),
 
                     // postcard(),

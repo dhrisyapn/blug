@@ -1,13 +1,16 @@
+import 'package:blug/forgotpage.dart';
+import 'package:blug/home.dart';
+import 'package:blug/signup.dart';
 import 'package:flutter/material.dart';
 
-class Signin extends StatefulWidget {
-  const Signin({super.key});
+class SigninPage extends StatefulWidget {
+  const SigninPage({super.key});
 
   @override
-  State<Signin> createState() => _LoginPageState();
+  State<SigninPage> createState() => _signinPageState();
 }
 
-class _LoginPageState extends State<Signin> {
+class _signinPageState extends State<SigninPage> {
   bool visible = false;
   var eyeicon = const Icon(Icons.visibility_off);
   void toggleicon() {
@@ -137,13 +140,22 @@ class _LoginPageState extends State<Signin> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    'Forgot secret?',
-                    style: TextStyle(
-                      color: Color(0xFF525FE1),
-                      fontSize: 20,
-                      fontFamily: 'Alumni Sans',
-                      fontWeight: FontWeight.w500,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPaasswordPage()));
+                    },
+                    child: Text(
+                      'Forgot secret?',
+                      style: TextStyle(
+                        color: Color(0xFF525FE1),
+                        fontSize: 20,
+                        fontFamily: 'Alumni Sans',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ],
@@ -154,23 +166,31 @@ class _LoginPageState extends State<Signin> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Container(
-                width: double.infinity,
-                height: 45,
-                decoration: ShapeDecoration(
-                  color: Color(0xFFFF6B00),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: ShapeDecoration(
+                    color: Color(0xFFFF6B00),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Get in',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontFamily: 'Alumni Sans',
-                      fontWeight: FontWeight.w400,
+                  child: Center(
+                    child: Text(
+                      'Get in',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontFamily: 'Alumni Sans',
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ),
@@ -191,13 +211,21 @@ class _LoginPageState extends State<Signin> {
               ),
             ),
             Center(
-              child: Text(
-                'Let’s get one new here',
-                style: TextStyle(
-                  color: Color(0xFFFF6B00),
-                  fontSize: 22,
-                  fontFamily: 'Alumni Sans',
-                  fontWeight: FontWeight.w700,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpPage()));
+                },
+                child: Text(
+                  'Let’s get one new here',
+                  style: TextStyle(
+                    color: Color(0xFFFF6B00),
+                    fontSize: 22,
+                    fontFamily: 'Alumni Sans',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             )

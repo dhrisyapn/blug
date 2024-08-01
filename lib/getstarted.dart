@@ -1,3 +1,4 @@
+import 'package:blug/signin.dart';
 import 'package:blug/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -130,7 +131,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SignUpPage()));
+                            builder: (context) => const SigninPage()));
                   },
                   child: Container(
                     width: double.infinity,

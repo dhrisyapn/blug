@@ -1,3 +1,4 @@
+import 'package:blug/home.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -224,23 +225,31 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 45,
-                    decoration: ShapeDecoration(
-                      color: Color(0xFFFF6B00),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 45,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFFF6B00),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Create account',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontFamily: 'Alumni Sans',
-                          fontWeight: FontWeight.w400,
+                      child: Center(
+                        child: Text(
+                          'Create account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontFamily: 'Alumni Sans',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),

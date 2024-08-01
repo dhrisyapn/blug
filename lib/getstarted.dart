@@ -1,3 +1,4 @@
+import 'package:blug/signup.dart';
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatefulWidget {
@@ -124,33 +125,41 @@ class _GetStartedPageState extends State<GetStartedPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 60),
-                child: Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFFFF6B00)),
-                      borderRadius: BorderRadius.circular(10),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()));
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 45,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 1, color: Color(0xFFFF6B00)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Row(
-                      children: [
-                        Image.asset('assets/mail.png'),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          'Continue with Email',
-                          style: TextStyle(
-                            color: Color(0xFFFF6B00),
-                            fontSize: 25,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 50),
+                      child: Row(
+                        children: [
+                          Image.asset('assets/mail.png'),
+                          SizedBox(
+                            width: 20,
                           ),
-                        )
-                      ],
+                          Text(
+                            'Continue with Email',
+                            style: TextStyle(
+                              color: Color(0xFFFF6B00),
+                              fontSize: 25,
+                              fontFamily: 'Alumni Sans',
+                              fontWeight: FontWeight.w100,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -2,7 +2,7 @@ import 'package:blug/firebase_options.dart';
 import 'package:blug/forgotpage.dart';
 import 'package:blug/getstarted.dart';
 import 'package:blug/home.dart';
-import 'package:blug/login.dart';
+import 'package:blug/signin.dart';
 import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
 import 'package:blug/signup.dart';
@@ -32,6 +32,6 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           useMaterial3: true,
         ),
-        home: SignUpPage());
+        home: SplashScreen());
   }
 }

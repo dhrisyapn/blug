@@ -54,9 +54,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDC-nNaTNy5ISxoLGwMJfP1JymqC9_QTfU',
-    appId: '1:212704570054:android:3d159d20b180ddfb9105c7',
+    appId: '1:212704570054:android:9f4e167d4d9ecdb59105c7',
     messagingSenderId: '212704570054',
     projectId: 'blug-d8bc7',
     storageBucket: 'blug-d8bc7.appspot.com',
   );
+
 }

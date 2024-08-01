@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class Signin extends StatefulWidget {
+  const Signin({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<Signin> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<Signin> {
   bool visible = false;
   var eyeicon = const Icon(Icons.visibility_off);
   void toggleicon() {

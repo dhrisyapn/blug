@@ -7,6 +7,7 @@ import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
 import 'package:blug/signup.dart';
 import 'package:blug/splash.dart';
+import 'package:blug/username.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,6 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           useMaterial3: true,
         ),
-        home: SplashScreen());
+        home: UsernamePage());
   }
 }

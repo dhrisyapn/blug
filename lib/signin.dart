@@ -1,6 +1,7 @@
 import 'package:blug/forgotpage.dart';
 import 'package:blug/home.dart';
 import 'package:blug/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SigninPage extends StatefulWidget {
@@ -22,6 +23,34 @@ class _signinPageState extends State<SigninPage> {
         eyeicon = const Icon(Icons.visibility_off);
       }
     });
+  }
+
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //sign in function
+  Future<void> signInWithEmailPassword() async {
+    try {
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: emailcontroller.text.trim(),
+        password: passwordcontroller.text.trim(),
+      );
+
+      // Check if sign in was successful
+      if (userCredential.user != null) {
+        // Navigate to your target page if login is successful
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle errors
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 
   @override
@@ -66,6 +95,7 @@ class _signinPageState extends State<SigninPage> {
                     ),
                   ),
                   TextField(
+                    controller: emailcontroller,
                     decoration: InputDecoration(
                       hintText: 'Your awesome email here',
                       hintStyle: TextStyle(
@@ -103,6 +133,7 @@ class _signinPageState extends State<SigninPage> {
                     ),
                   ),
                   TextField(
+                    controller: passwordcontroller,
                     decoration: InputDecoration(
                       hintText: 'Our secret here',
                       hintStyle: TextStyle(
@@ -168,10 +199,7 @@ class _signinPageState extends State<SigninPage> {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                  signInWithEmailPassword();
                 },
                 child: Container(
                   width: double.infinity,

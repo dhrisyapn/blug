@@ -1,3 +1,4 @@
+import 'package:blug/firebase_options.dart';
 import 'package:blug/forgotpage.dart';
 import 'package:blug/getstarted.dart';
 import 'package:blug/home.dart';
@@ -6,9 +7,13 @@ import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
 import 'package:blug/signup.dart';
 import 'package:blug/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

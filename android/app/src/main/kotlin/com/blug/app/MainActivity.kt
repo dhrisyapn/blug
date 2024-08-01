@@ -1,4 +1,4 @@
-package com.example.blug
+package com.blug.app
 
 import io.flutter.embedding.android.FlutterActivity
 

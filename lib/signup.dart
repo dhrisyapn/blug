@@ -8,6 +8,32 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool visible = false;
+  var eyeicon = const Icon(Icons.visibility_off);
+  void toggleicon() {
+    setState(() {
+      visible = !visible;
+      if (!visible) {
+        eyeicon = const Icon(Icons.visibility);
+      } else {
+        eyeicon = const Icon(Icons.visibility_off);
+      }
+    });
+  }
+
+  bool visible1 = false;
+  var eyeicon1 = const Icon(Icons.visibility_off);
+  void toggleicon1() {
+    setState(() {
+      visible1 = !visible1;
+      if (!visible1) {
+        eyeicon1 = const Icon(Icons.visibility);
+      } else {
+        eyeicon1 = const Icon(Icons.visibility_off);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +43,23 @@ class _SignUpPageState extends State<SignUpPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.2,
             ),
             Image.asset('assets/Group 12.png'),
             SizedBox(
-              height: 70,
+              height: MediaQuery.of(context).size.height * 0.12,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Text(
+                'Create account!',
+                style: TextStyle(
+                  color: Color(0xFFFF6B00),
+                  fontSize: 45,
+                  fontFamily: 'Alumni Sans',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
@@ -129,12 +167,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderSide:
                             BorderSide(width: 1, color: Color(0xFF525FE1)),
                       ),
+                      suffixIcon: IconButton(
+                          onPressed: toggleicon,
+                          icon: eyeicon,
+                          color: Color(0xff525FE1)),
                     ),
                     style: TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
                     cursorColor: Color(0xFF525FE1),
+                    obscureText: visible,
                   ),
                   SizedBox(
                     height: 8,
@@ -166,12 +209,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         borderSide:
                             BorderSide(width: 1, color: Color(0xFF525FE1)),
                       ),
+                      suffixIcon: IconButton(
+                          onPressed: toggleicon1,
+                          icon: eyeicon1,
+                          color: Color(0xff525FE1)),
                     ),
                     style: TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
                     cursorColor: Color(0xFF525FE1),
+                    obscureText: visible1,
                   ),
                   SizedBox(
                     height: 20,

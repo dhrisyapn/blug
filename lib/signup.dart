@@ -1,4 +1,5 @@
 import 'package:blug/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -33,6 +34,70 @@ class _SignUpPageState extends State<SignUpPage> {
         eyeicon1 = const Icon(Icons.visibility_off);
       }
     });
+  }
+
+  TextEditingController fullname = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController retypepasswordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // Sign up function
+  Future<void> signUpWithEmailPassword() async {
+    if (passwordController.text != retypepasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // Check if sign up was successful
+      if (userCredential.user != null) {
+        // Navigate to your target page if sign up is successful
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle errors
+      String errorMessage;
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'The account already exists for that email.';
+      } else {
+        errorMessage = 'An error occurred. Please try again.';
+      }
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
+  }
+
+  void validateAndSignUp() {
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        retypepasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All fields are required')),
+      );
+      return;
+    }
+
+    if (passwordController.text != retypepasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+
+    signUpWithEmailPassword();
   }
 
   @override
@@ -77,6 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Your awesome email here',
                       hintStyle: TextStyle(
@@ -114,6 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   TextField(
+                    controller: fullname,
                     decoration: InputDecoration(
                       hintText: 'Your splendid name here ',
                       hintStyle: TextStyle(
@@ -151,6 +218,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   TextField(
+                    controller: passwordController,
                     decoration: InputDecoration(
                       hintText: 'Secret here',
                       hintStyle: TextStyle(
@@ -193,6 +261,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   TextField(
+                    controller: retypepasswordController,
                     decoration: InputDecoration(
                       hintText: 'Secret again here',
                       hintStyle: TextStyle(
@@ -227,10 +296,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                      validateAndSignUp();
                     },
                     child: Container(
                       width: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:blug/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -59,6 +60,14 @@ class _SignUpPageState extends State<SignUpPage> {
 
       // Check if sign up was successful
       if (userCredential.user != null) {
+        //save name to collction userdata doc email to firestore
+        await FirebaseFirestore.instance
+            .collection('userdata')
+            .doc(emailController.text)
+            .set({
+          'name': fullname.text,
+        });
+
         // Navigate to your target page if sign up is successful
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomePage()));

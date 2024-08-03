@@ -1,3 +1,6 @@
+import 'package:blug/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UsernamePage extends StatefulWidget {
@@ -8,6 +11,44 @@ class UsernamePage extends StatefulWidget {
 }
 
 class _UsernamePageState extends State<UsernamePage> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final email = FirebaseAuth.instance.currentUser!.email;
+  Future<void> checkAndSaveUsername() async {
+    // Get the username from the text field
+    String username = usernameController.text.trim();
+
+    if (username.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Username  cannot be empty')),
+      );
+      return;
+    }
+
+    DocumentSnapshot doc =
+        await _firestore.collection('usernames').doc(username).get();
+
+    if (doc.exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Username already taken')),
+      );
+    } else {
+      await _firestore.collection('usernames').doc(username).set({
+        'email': email,
+      });
+      await _firestore.collection('userdata').doc(email).set({
+        'username': username,
+      }, SetOptions(merge: true));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Username saved successfully')),
+      );
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +108,7 @@ class _UsernamePageState extends State<UsernamePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
+                    controller: usernameController,
                     decoration: InputDecoration(
                       hintText: 'choose a username',
                       hintStyle: TextStyle(
@@ -97,25 +139,30 @@ class _UsernamePageState extends State<UsernamePage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 45,
-                    decoration: ShapeDecoration(
-                      color: Color(0xFFFF6B00),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  GestureDetector(
+                    onTap: () {
+                      checkAndSaveUsername();
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 45,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFFF6B00),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
+                      child: Center(
+                          child: Text(
+                        'Continue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontFamily: 'Alumni Sans',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )),
                     ),
-                    child: Center(
-                        child: Text(
-                      'Continue',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontFamily: 'Alumni Sans',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )),
                   ),
                 ],
               ),

@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(bottom: 10, right: 10),
         child: GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context, MaterialPageRoute(builder: (context) => PostPage()));
             },
             child: Container(

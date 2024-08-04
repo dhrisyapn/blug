@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PostPage extends StatefulWidget {
@@ -8,6 +10,48 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  final email = FirebaseAuth.instance.currentUser!.email;
+  TextEditingController descriptionController = TextEditingController();
+  Future<void> savePost() async {
+    String? name;
+    String? username;
+    if (email != null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('userdata')
+          .doc(email)
+          .get();
+
+      if (doc.exists) {
+        setState(() {
+          name = doc['name'];
+          username = doc['username'];
+        });
+        //save username ,name, corrent timestamp, description to collection post
+        String description = descriptionController.text.trim();
+        if (description.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Description cannot be empty')),
+          );
+          return;
+        }
+        await FirebaseFirestore.instance.collection('posts').add({
+          'name': name,
+          'username': username,
+          'description': description,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Post saved successfully')),
+        );
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User data not found')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +123,7 @@ class _PostPageState extends State<PostPage> {
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
             child: TextField(
+              controller: descriptionController,
               decoration: InputDecoration(
                 hintText: 'Write something awesome...',
                 hintStyle: TextStyle(
@@ -108,23 +153,28 @@ class _PostPageState extends State<PostPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
-            child: Container(
-              width: double.infinity,
-              height: 45,
-              decoration: ShapeDecoration(
-                color: Color(0xFFFF6B00),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            child: GestureDetector(
+              onTap: () {
+                savePost();
+              },
+              child: Container(
+                width: double.infinity,
+                height: 45,
+                decoration: ShapeDecoration(
+                  color: Color(0xFFFF6B00),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  'Post',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontFamily: 'Alumni Sans',
-                    fontWeight: FontWeight.w400,
+                child: Center(
+                  child: Text(
+                    'Post',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontFamily: 'Alumni Sans',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
               ),

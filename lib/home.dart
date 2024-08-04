@@ -1,4 +1,5 @@
 import 'package:blug/post.dart';
+import 'package:blug/profile.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -128,6 +129,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()));
+              },
+
+              // Replace the Image.asset with an Icon
+              child: Icon(
+                Icons.account_circle, // Profile icon from the Icons class
+                size: 40.0, // Set the size of the icon
+                color: Color(0xff525FE1), // Set the color of the icon
+              ),
+            ),
+          )
+        ],
         title: Center(
           child: Image.asset(
             'assets/Group 3.png',

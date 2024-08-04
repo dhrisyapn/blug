@@ -141,7 +141,16 @@ class _UsernamePageState extends State<UsernamePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      checkAndSaveUsername();
+                      String username = usernameController.text.trim();
+                      if (!username.contains(' ')) {
+                        checkAndSaveUsername();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Username should not contain spaces')),
+                        );
+                      }
                     },
                     child: Container(
                       width: double.infinity,

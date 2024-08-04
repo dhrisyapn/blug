@@ -1,6 +1,10 @@
 import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
+import 'package:blug/providerclass.dart';
 import 'package:flutter/material.dart';
+// import firestore
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget postcard() {
+  Widget postcard(String username, String name, String body) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -52,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Dhrisya P N',
+                            name,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
@@ -62,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            '@dhrisyapn',
+                            '@$username',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xFFFF6B00),
@@ -98,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10,
               ),
               Text(
-                'The post will have a long description user shared. The post will have a long descrip......',
+                body,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -123,6 +127,30 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void getPostData() {
+    Provider.of<PostsProvider>(context, listen: false).postdata.clear();
+// get name,username,description from collection posts all documents and save to provider
+    FirebaseFirestore.instance
+        .collection('posts')
+        .orderBy('timestamp', descending: true)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        Provider.of<PostsProvider>(context, listen: false).addPost(Posts(
+          username: doc['username'],
+          name: doc['name'],
+          body: doc['description'],
+        ));
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPostData();
   }
 
   @override
@@ -197,8 +225,18 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          postcard(),
-          postcard(),
+          //call postcard widget for each post in provider
+          Expanded(
+            child: ListView.builder(
+              itemCount: Provider.of<PostsProvider>(context).post.length,
+              itemBuilder: (context, index) {
+                return postcard(
+                    Provider.of<PostsProvider>(context).post[index].username,
+                    Provider.of<PostsProvider>(context).post[index].name,
+                    Provider.of<PostsProvider>(context).post[index].body);
+              },
+            ),
+          )
         ],
       ),
     );

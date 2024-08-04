@@ -2,6 +2,7 @@ import 'package:blug/firebase_options.dart';
 import 'package:blug/forgotpage.dart';
 import 'package:blug/getstarted.dart';
 import 'package:blug/home.dart';
+import 'package:blug/providerclass.dart';
 import 'package:blug/signin.dart';
 import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
@@ -10,6 +11,7 @@ import 'package:blug/splash.dart';
 import 'package:blug/username.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,13 +28,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          useMaterial3: true,
-        ),
-        home: SplashScreen());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PostsProvider()),
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            useMaterial3: true,
+          ),
+          home: SplashScreen()),
+    );
   }
 }

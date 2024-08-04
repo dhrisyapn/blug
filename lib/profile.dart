@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -115,6 +117,37 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  final email = FirebaseAuth.instance.currentUser!.email;
+
+  String? name;
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    if (email != null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('userdata')
+          .doc(email)
+          .get();
+
+      if (doc.exists) {
+        setState(() {
+          name = doc['name'];
+          username = doc['username'];
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User data not found')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Dhrisya P N',
+                          name!,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -166,7 +199,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          '@dhrisyapn',
+                          username!,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Color(0xFFFF6B00),

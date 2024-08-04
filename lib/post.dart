@@ -15,7 +15,7 @@ class _PostPageState extends State<PostPage> {
         title: Center(
           child: Image.asset(
             'assets/Group 3.png',
-            height: 90,
+            height: 40,
           ),
         ),
         backgroundColor:

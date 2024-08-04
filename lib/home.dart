@@ -1,3 +1,4 @@
+import 'package:blug/post.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -136,6 +137,27 @@ class _HomePageState extends State<HomePage> {
         backgroundColor:
             Colors.transparent, // Set background color to transparent
         elevation: 0, // Optionally remove the shadow
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 10, right: 10),
+        child: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => PostPage()));
+            },
+            child: Container(
+              width: 55,
+              height: 55,
+              decoration: const ShapeDecoration(
+                color: Color(0xFFFF6B00),
+                shape: OvalBorder(),
+              ),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 35,
+              ),
+            )),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

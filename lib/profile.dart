@@ -1,6 +1,8 @@
+import 'package:blug/providerclass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,7 +12,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Widget postcard() {
+  Widget postcard(String body) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -90,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Text(
-                'The post will have a long description user shared. The post will have a long descrip......',
+                body,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -259,7 +261,20 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: 20,
           ),
-          postcard(),
+          //call postcard() function for post with username=username from provider
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: Provider.of<PostsProvider>(context).post.length,
+              itemBuilder: (context, index) {
+                if (Provider.of<PostsProvider>(context).post[index].username ==
+                    username) {
+                  return postcard(
+                      Provider.of<PostsProvider>(context).post[index].body);
+                }
+              },
+            ),
+          )
         ],
       ),
     );

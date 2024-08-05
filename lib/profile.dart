@@ -259,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 19,
           ),
           //call postcard() function for post with username=username from provider
 

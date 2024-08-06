@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -52,6 +55,18 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
+  File? _image;
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,17 +115,22 @@ class _PostPageState extends State<PostPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/image.png'),
+                  _image == null
+                      ? Image.asset('assets/image.png')
+                      : Image.file(_image!),
                   SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    'Add image',
-                    style: TextStyle(
-                      color: Color(0xFF525FE1),
-                      fontSize: 13,
-                      fontFamily: 'Alumni Sans',
-                      fontWeight: FontWeight.w100,
+                  TextButton(
+                    onPressed: () {
+                      _pickImage();
+                    },
+                    child: Text(
+                      'Add image',
+                      style: TextStyle(
+                        fontFamily: 'Alumni Sans',
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ],

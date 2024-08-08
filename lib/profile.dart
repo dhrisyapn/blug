@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:blug/providerclass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -150,6 +153,18 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  File? _image;
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,9 +192,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Column(
                       children: [
-                        Image.asset(
-                          'assets/circle.png',
-                          height: 90,
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: _image == null
+                              ? Image.asset(
+                                  'assets/circle.png',
+                                  height: 90,
+                                )
+                              : CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: FileImage(_image!),
+                                ),
                         ),
                       ],
                     ),

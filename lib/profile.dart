@@ -16,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Widget postcard(String body) {
+  Widget postcard(String body, String image) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -73,23 +73,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Column(
-                      children: [
-                        Image.asset('assets/like.png'),
-                        Text(
-                          '96 likes',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w300,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
                 ],
               ),
               SizedBox(
@@ -115,6 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
                 ),
+                child: Image.network(image, fit: BoxFit.cover),
               )
             ],
           ),
@@ -127,6 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String? name;
   String? username;
+  String? profile;
 
   @override
   void initState() {
@@ -145,6 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           name = doc['name'];
           username = doc['username'];
+          profile = doc['profile'];
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -221,17 +207,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     Column(
                       children: [
                         GestureDetector(
-                          onTap: _pickImage,
-                          child: _image == null
-                              ? Image.asset(
-                                  'assets/circle.png',
-                                  height: 90,
-                                )
-                              : CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: FileImage(_image!),
+                            onTap: _pickImage,
+                            child: Container(
+                              width: 90,
+                              height: 90,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFD9D9D9),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60),
                                 ),
-                        ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(60),
+                                child: _image == null
+                                    ? profile == null
+                                        ? Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                            size: 35,
+                                          )
+                                        : Image.network(profile!,
+                                            fit: BoxFit.cover)
+                                    : Image.file(_image!, fit: BoxFit.cover),
+                              ),
+                            )),
                       ],
                     ),
                     SizedBox(
@@ -242,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          name!,
+                          name ?? 'user',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -252,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          username!,
+                          username ?? 'username',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Color(0xFFFF6B00),
@@ -321,7 +320,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (Provider.of<PostsProvider>(context).post[index].username ==
                     username) {
                   return postcard(
-                      Provider.of<PostsProvider>(context).post[index].body);
+                      Provider.of<PostsProvider>(context).post[index].body,
+                      Provider.of<PostsProvider>(context).post[index].image);
                 }
               },
             ),

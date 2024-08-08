@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blug/providerclass.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -162,6 +163,33 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _image = File(pickedFile.path);
       });
+      await _uploadImageAndSaveProfile();
+    }
+  }
+
+  Future<void> _uploadImageAndSaveProfile() async {
+    if (_image == null) return;
+    try {
+      // Upload image to Firebase Storage
+      String fileName =
+          'profile_images/${DateTime.now().millisecondsSinceEpoch}.png';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageRef.putFile(_image!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Get the download URL
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+      // Save profile image URL to Firestore
+      await FirebaseFirestore.instance.collection('userdata').doc(email).set({
+        'profile': downloadURL,
+      }, SetOptions(merge: true));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Profile image updated successfully!')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile image: $e')));
     }
   }
 

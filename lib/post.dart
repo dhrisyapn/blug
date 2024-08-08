@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,41 +18,66 @@ class _PostPageState extends State<PostPage> {
   TextEditingController descriptionController = TextEditingController();
   Future<void> savePost() async {
     String? name;
-    String? username;
-    if (email != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('userdata')
-          .doc(email)
-          .get();
 
-      if (doc.exists) {
-        setState(() {
-          name = doc['name'];
-          username = doc['username'];
-        });
-        //save username ,name, corrent timestamp, description to collection post
-        String description = descriptionController.text.trim();
-        if (description.isEmpty) {
+    String? username;
+
+    try {
+      // Upload image to Firebase Storage
+      String fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageRef.putFile(_image!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Get the download URL
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      // Use the downloadURL as needed
+
+      if (email != null) {
+        DocumentSnapshot doc = await FirebaseFirestore.instance
+            .collection('userdata')
+            .doc(email)
+            .get();
+
+        if (doc.exists) {
+          setState(() {
+            name = doc['name'];
+            username = doc['username'];
+          });
+          //save username ,name, corrent timestamp, description to collection post
+          String description = descriptionController.text.trim();
+          if (description.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Description cannot be empty')),
+            );
+            return;
+          }
+          await FirebaseFirestore.instance.collection('posts').add({
+            'name': name,
+            'username': username,
+            'description': description,
+            'timestamp': FieldValue.serverTimestamp(),
+            'image': downloadURL,
+          });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Description cannot be empty')),
+            SnackBar(content: Text('Post saved successfully')),
           );
-          return;
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User data not found')),
+          );
         }
-        await FirebaseFirestore.instance.collection('posts').add({
-          'name': name,
-          'username': username,
-          'description': description,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Post saved successfully')),
-        );
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User data not found')),
-        );
       }
+    } on FirebaseException catch (e) {
+      // Handle Firebase specific exceptions
+      if (e.code == 'canceled') {
+        print('Upload was canceled');
+      } else {
+        print('FirebaseException: ${e.message}');
+      }
+    } catch (e) {
+      // Handle any other exceptions
+      print('An unknown error occurred: $e');
     }
   }
 
@@ -104,38 +130,44 @@ class _PostPageState extends State<PostPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30),
-            child: Container(
-              width: double.infinity,
-              height: 120,
-              decoration: ShapeDecoration(
-                color: Color(0x33525FE1),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _image == null
-                      ? Image.asset('assets/image.png')
-                      : Image.file(_image!),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _pickImage();
-                    },
-                    child: Text(
-                      'Add image',
-                      style: TextStyle(
-                        fontFamily: 'Alumni Sans',
-                        fontWeight: FontWeight.w300,
-                      ),
+            child: _image == null
+                ? Container(
+                    width: double.infinity,
+                    height: 120,
+                    decoration: ShapeDecoration(
+                      color: Color(0x33525FE1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
                     ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 8,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            _pickImage();
+                          },
+                          child: Text(
+                            'Add image',
+                            style: TextStyle(
+                              fontFamily: 'Alumni Sans',
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(
+                    child: Image.file(
+                      _image!,
+                      fit: BoxFit.cover,
+                    ),
+                    width: double.infinity,
+                    height: 120,
                   ),
-                ],
-              ),
-            ),
           ),
           SizedBox(
             height: 25,
@@ -175,7 +207,13 @@ class _PostPageState extends State<PostPage> {
             padding: const EdgeInsets.only(left: 30, right: 30),
             child: GestureDetector(
               onTap: () {
-                savePost();
+                if (_image == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please select an image')),
+                  );
+                } else {
+                  savePost();
+                }
               },
               child: Container(
                 width: double.infinity,

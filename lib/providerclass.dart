@@ -4,10 +4,12 @@ class Posts {
   final String username;
   final String name;
   final String body;
+  final String image;
   Posts({
     required this.username,
     required this.name,
     required this.body,
+    required this.image,
   });
 }
 

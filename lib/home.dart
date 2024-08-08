@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget postcard(String username, String name, String body) {
+  Widget postcard(String username, String name, String body, String src) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,23 +80,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Column(
-                      children: [
-                        Image.asset('assets/like.png'),
-                        Text(
-                          '96 likes',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w300,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
                 ],
               ),
               SizedBox(
@@ -103,6 +87,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Text(
                 body,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -121,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
                 ),
+                child: Image.network(src, fit: BoxFit.cover),
               )
             ],
           ),
@@ -142,6 +128,7 @@ class _HomePageState extends State<HomePage> {
           username: doc['username'],
           name: doc['name'],
           body: doc['description'],
+          image: doc['image'],
         ));
       });
     });
@@ -233,7 +220,8 @@ class _HomePageState extends State<HomePage> {
                 return postcard(
                     Provider.of<PostsProvider>(context).post[index].username,
                     Provider.of<PostsProvider>(context).post[index].name,
-                    Provider.of<PostsProvider>(context).post[index].body);
+                    Provider.of<PostsProvider>(context).post[index].body,
+                    Provider.of<PostsProvider>(context).post[index].image);
               },
             ),
           )

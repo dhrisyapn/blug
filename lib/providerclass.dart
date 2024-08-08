@@ -5,11 +5,14 @@ class Posts {
   final String name;
   final String body;
   final String image;
+  final String profile;
+
   Posts({
     required this.username,
     required this.name,
     required this.body,
     required this.image,
+    required this.profile,
   });
 }
 

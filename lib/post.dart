@@ -20,6 +20,7 @@ class _PostPageState extends State<PostPage> {
     String? name;
 
     String? username;
+    String? profilePic;
 
     try {
       // Upload image to Firebase Storage
@@ -42,6 +43,7 @@ class _PostPageState extends State<PostPage> {
           setState(() {
             name = doc['name'];
             username = doc['username'];
+            profilePic = doc['profile'].exists ? doc['profile'] : '';
           });
           //save username ,name, corrent timestamp, description to collection post
           String description = descriptionController.text.trim();
@@ -57,6 +59,7 @@ class _PostPageState extends State<PostPage> {
             'description': description,
             'timestamp': FieldValue.serverTimestamp(),
             'image': downloadURL,
+            'profile': profilePic,
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Post saved successfully')),

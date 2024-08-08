@@ -14,7 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget postcard(String username, String name, String body, String src) {
+  Widget postcard(
+      String username, String name, String body, String src, String profile) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -47,7 +48,26 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Column(
                         children: [
-                          Image.asset('assets/round.png'),
+                          Container(
+                            width: 29,
+                            height: 29,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFD9D9D9),
+                              shape: OvalBorder(),
+                            ),
+                            child: profile == ''
+                                ? Icon(
+                                    Icons.account_circle,
+                                    color: Colors.white,
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.network(
+                                      profile,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                          )
                         ],
                       ),
                       SizedBox(
@@ -129,6 +149,7 @@ class _HomePageState extends State<HomePage> {
           name: doc['name'],
           body: doc['description'],
           image: doc['image'],
+          profile: doc['profile'],
         ));
       });
     });
@@ -176,8 +197,9 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(bottom: 10, right: 10),
         child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => PostPage()));
+              Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PostPage()))
+                  .then((value) => getPostData());
             },
             child: Container(
               width: 55,
@@ -193,39 +215,46 @@ class _HomePageState extends State<HomePage> {
               ),
             )),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text(
-              'Home',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF525FE1),
-                fontSize: 25,
-                fontFamily: 'Alumni Sans',
-                fontWeight: FontWeight.w300,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          getPostData();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Text(
+                'Home',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF525FE1),
+                  fontSize: 25,
+                  fontFamily: 'Alumni Sans',
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ),
-          ),
-          //call postcard widget for each post in provider
-          Expanded(
-            child: ListView.builder(
-              itemCount: Provider.of<PostsProvider>(context).post.length,
-              itemBuilder: (context, index) {
-                return postcard(
+            //call postcard widget for each post in provider
+            Expanded(
+              child: ListView.builder(
+                itemCount: Provider.of<PostsProvider>(context).post.length,
+                itemBuilder: (context, index) {
+                  return postcard(
                     Provider.of<PostsProvider>(context).post[index].username,
                     Provider.of<PostsProvider>(context).post[index].name,
                     Provider.of<PostsProvider>(context).post[index].body,
-                    Provider.of<PostsProvider>(context).post[index].image);
-              },
-            ),
-          )
-        ],
+                    Provider.of<PostsProvider>(context).post[index].image,
+                    Provider.of<PostsProvider>(context).post[index].profile,
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

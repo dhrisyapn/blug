@@ -40,8 +40,14 @@ class _signinPageState extends State<SigninPage> {
       // Check if sign in was successful
       if (userCredential.user != null) {
         // Navigate to your target page if login is successful
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+
+                    // Change this to the page you want to navigate to after login
+                    const HomePage()),
+            (route) => false);
       }
     } on FirebaseAuthException catch (e) {
       // Handle errors

@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
         title: Center(
           child: Image.asset(
             'assets/Group 3.png',
-            height: 40,
+            height: 25,
           ),
         ),
         backgroundColor:

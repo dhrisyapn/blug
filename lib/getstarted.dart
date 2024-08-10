@@ -65,26 +65,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Row(
-                      children: [
-                        Image.asset('assets/Group 4.png'),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          'Continue with Google',
-                          style: TextStyle(
-                            color: Color(0xFF525FE1),
-                            fontSize: 25,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w100,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
                 ),
               ),
               SizedBox(

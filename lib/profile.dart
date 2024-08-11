@@ -205,33 +205,53 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Column(
+                    Stack(
                       children: [
+                        //give an edit image
+
                         GestureDetector(
-                            onTap: _pickImage,
-                            child: Container(
-                              width: 90,
-                              height: 90,
-                              decoration: ShapeDecoration(
-                                color: Color(0xFFD9D9D9),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(60),
-                                ),
-                              ),
-                              child: ClipRRect(
+                          onTap: _pickImage,
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: ShapeDecoration(
+                              color: Color(0xFFD9D9D9),
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(60),
-                                child: _image == null
-                                    ? profile == null
-                                        ? Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                            size: 35,
-                                          )
-                                        : Image.network(profile!,
-                                            fit: BoxFit.cover)
-                                    : Image.file(_image!, fit: BoxFit.cover),
                               ),
-                            )),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(60),
+                              child: _image == null
+                                  ? profile == null
+                                      ? Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                          size: 35,
+                                        )
+                                      : Image.network(profile!,
+                                          fit: BoxFit.cover)
+                                  : Image.file(_image!, fit: BoxFit.cover),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 246, 131, 50),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(

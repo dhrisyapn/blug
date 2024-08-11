@@ -54,22 +54,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
               SizedBox(
                 height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Color(0xFF525FE1)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -77,22 +61,6 @@ class _GetStartedPageState extends State<GetStartedPage> {
                     width: 135,
                     height: 1,
                     decoration: BoxDecoration(color: Color(0xFF525FE1)),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Or',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontFamily: 'Alumni Sans',
-                      fontWeight: FontWeight.w300,
-                      height: 0.04,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
                   ),
                   Container(
                     width: 135,

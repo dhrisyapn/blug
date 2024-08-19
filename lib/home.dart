@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blug/post.dart';
 import 'package:blug/profile.dart';
 import 'package:blug/providerclass.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import firestore
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,13 +23,12 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
         width: double.infinity,
-        height: 208,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x3F525FE1),
               blurRadius: 27,
@@ -51,12 +53,12 @@ class _HomePageState extends State<HomePage> {
                           Container(
                             width: 29,
                             height: 29,
-                            decoration: ShapeDecoration(
+                            decoration: const ShapeDecoration(
                               color: Color(0xFFD9D9D9),
                               shape: OvalBorder(),
                             ),
                             child: profile == ''
-                                ? Icon(
+                                ? const Icon(
                                     Icons.account_circle,
                                     color: Colors.white,
                                   )
@@ -70,30 +72,33 @@ class _HomePageState extends State<HomePage> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             name,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                               fontFamily: 'Alumni Sans',
                               fontWeight: FontWeight.w300,
+                              height: 0.8,
                             ),
                           ),
                           Text(
                             '@$username',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFFFF6B00),
                               fontSize: 13,
                               fontFamily: 'Alumni Sans',
                               fontWeight: FontWeight.w300,
+                              height: 0.8,
                             ),
                           )
                         ],
@@ -102,32 +107,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 body,
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 18,
                   fontFamily: 'Alumni Sans',
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Container(
                 width: double.infinity,
                 height: 95,
                 decoration: ShapeDecoration(
-                  color: Color(0xFFD9D9D9),
+                  color: const Color(0xFFD9D9D9),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
                 ),
+                margin: const EdgeInsets.only(bottom: 15),
                 child: Image.network(src, fit: BoxFit.cover),
-              )
+              ),
             ],
           ),
         ),
@@ -135,23 +141,47 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int count = 0;
   void getPostData() {
+    setState(() {
+      count = 0;
+    });
     Provider.of<PostsProvider>(context, listen: false).postdata.clear();
+
+    String username = '';
+    //get username of current user from collection userdata doc email
+    FirebaseFirestore.instance
+        .collection('userdata')
+        .doc(email)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        username = documentSnapshot['username'];
+      } else {}
+    });
 // get name,username,description from collection posts all documents and save to provider
     FirebaseFirestore.instance
         .collection('posts')
         .orderBy('timestamp', descending: true)
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
+        if (doc['username'] == username) {
+          setState(() {
+            count++;
+          });
+        }
+        Provider.of<PostsProvider>(context, listen: false)
+            .setCount(count.toString());
         Provider.of<PostsProvider>(context, listen: false).addPost(Posts(
           username: doc['username'],
           name: doc['name'],
           body: doc['description'],
           image: doc['image'],
           profile: doc['profile'],
+          timestamp: doc['timestamp'].toDate(),
         ));
-      });
+      }
     });
   }
 
@@ -161,44 +191,86 @@ class _HomePageState extends State<HomePage> {
     getPostData();
   }
 
+  String email = FirebaseAuth.instance.currentUser!.email!;
+  Future<String> _getProfileUrl() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('userdata')
+        .doc(email)
+        .get();
+
+    return userDoc['profile'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
               },
 
               // Replace the Image.asset with an Icon
-              child: Icon(
-                Icons.account_circle, // Profile icon from the Icons class
-                size: 40.0, // Set the size of the icon
-                color: Color(0xff525FE1), // Set the color of the icon
-              ),
+              // child: const Icon(
+              //   Icons.account_circle, // Profile icon from the Icons class
+              //   size: 40.0, // Set the size of the icon
+              //   color: Color(0xff525FE1), // Set the color of the icon
+              // ),
+              child: _getProfileUrl() == ''
+                  ? const Icon(
+                      Icons.account_circle, // Profile icon from the Icons class
+                      size: 40.0, // Set the size of the icon
+                      color: Color(0xff525FE1), // Set the color of the icon
+                    )
+                  : FutureBuilder<String>(
+                      future: _getProfileUrl(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.network(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                              width: 35,
+                              height: 35,
+                            ),
+                          );
+                        } else {
+                          return const Icon(
+                            Icons
+                                .account_circle, // Profile icon from the Icons class
+                            size: 35, // Set the size of the icon
+                            color:
+                                Color(0xff525FE1), // Set the color of the icon
+                          );
+                        }
+                      },
+                    ),
             ),
           )
         ],
-        title: Center(
-          child: Image.asset(
-            'assets/Group 3.png',
-            height: 25,
-          ),
+        title: Image.asset(
+          'assets/Group 3.png',
+          height: 25,
         ),
+        centerTitle: true,
         backgroundColor:
             Colors.transparent, // Set background color to transparent
         elevation: 0, // Optionally remove the shadow
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 10, right: 10),
+        padding: const EdgeInsets.only(bottom: 10, right: 10),
         child: GestureDetector(
             onTap: () {
               Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostPage()))
+                      MaterialPageRoute(builder: (context) => const PostPage()))
                   .then((value) => getPostData());
             },
             child: Container(
@@ -208,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xFFFF6B00),
                 shape: OvalBorder(),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 color: Colors.white,
                 size: 35,
@@ -222,13 +294,13 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
               child: Text(
-                'Home',
+                'New posts',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF525FE1),

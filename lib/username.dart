@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blug/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +23,7 @@ class _UsernamePageState extends State<UsernamePage> {
 
     if (username.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Username  cannot be empty')),
+        const SnackBar(content: Text('Username  cannot be empty')),
       );
       return;
     }
@@ -31,7 +33,7 @@ class _UsernamePageState extends State<UsernamePage> {
 
     if (doc.exists) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Username already taken')),
+        const SnackBar(content: Text('Username already taken')),
       );
     } else {
       await _firestore.collection('usernames').doc(username).set({
@@ -42,10 +44,10 @@ class _UsernamePageState extends State<UsernamePage> {
       }, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Username saved successfully')),
+        const SnackBar(content: Text('Username saved successfully')),
       );
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 
@@ -63,7 +65,7 @@ class _UsernamePageState extends State<UsernamePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.15,
             ),
-            Text.rich(
+            const Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
@@ -99,7 +101,7 @@ class _UsernamePageState extends State<UsernamePage> {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Padding(
@@ -111,7 +113,7 @@ class _UsernamePageState extends State<UsernamePage> {
                     controller: usernameController,
                     decoration: InputDecoration(
                       hintText: 'choose a username',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: Color(0x7F525FE1),
                         fontFamily: 'Alumni Sans',
                         fontWeight: FontWeight.w100,
@@ -119,24 +121,24 @@ class _UsernamePageState extends State<UsernamePage> {
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                     textAlign:
                         TextAlign.center, // Align the hint text at the center
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
@@ -146,7 +148,7 @@ class _UsernamePageState extends State<UsernamePage> {
                         checkAndSaveUsername();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content:
                                   Text('Username should not contain spaces')),
                         );
@@ -156,12 +158,12 @@ class _UsernamePageState extends State<UsernamePage> {
                       width: double.infinity,
                       height: 45,
                       decoration: ShapeDecoration(
-                        color: Color(0xFFFF6B00),
+                        color: const Color(0xFFFF6B00),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Continue',
                         style: TextStyle(

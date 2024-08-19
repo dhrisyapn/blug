@@ -1,4 +1,5 @@
-import 'package:blug/home.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blug/username.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +13,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool visible = false;
-  var eyeicon = const Icon(Icons.visibility_off);
+  bool visible = true;
+  var eyeicon = const Icon(Icons.visibility);
   void toggleicon() {
     setState(() {
       visible = !visible;
@@ -25,8 +26,8 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  bool visible1 = false;
-  var eyeicon1 = const Icon(Icons.visibility_off);
+  bool visible1 = true;
+  var eyeicon1 = const Icon(Icons.visibility);
   void toggleicon1() {
     setState(() {
       visible1 = !visible1;
@@ -47,7 +48,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Future<void> signUpWithEmailPassword() async {
     if (passwordController.text != retypepasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Passwords do not match')),
+        const SnackBar(content: Text('Passwords do not match')),
       );
       return;
     }
@@ -67,11 +68,12 @@ class _SignUpPageState extends State<SignUpPage> {
             .doc(emailController.text)
             .set({
           'name': fullname.text,
+          'pprofile': '',
         });
 
         // Navigate to your target page if sign up is successful
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => UsernamePage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const UsernamePage()));
       }
     } on FirebaseAuthException catch (e) {
       // Handle errors
@@ -95,14 +97,14 @@ class _SignUpPageState extends State<SignUpPage> {
         passwordController.text.isEmpty ||
         retypepasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('All fields are required')),
+        const SnackBar(content: Text('All fields are required')),
       );
       return;
     }
 
     if (passwordController.text != retypepasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Passwords do not match')),
+        const SnackBar(content: Text('Passwords do not match')),
       );
       return;
     }
@@ -119,14 +121,14 @@ class _SignUpPageState extends State<SignUpPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             Image.asset('assets/Group 12.png'),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.12,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
               child: Text(
                 'Create account!',
                 style: TextStyle(
@@ -142,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Email address',
                     style: TextStyle(
                       color: Color(0xFF525FE1),
@@ -155,32 +157,32 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: emailController,
                     decoration: InputDecoration(
                       hintText: 'Your awesome email here',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Color(0x7F525FE1),
                           fontFamily: 'Alumni Sans',
                           fontWeight: FontWeight.w100,
                           fontSize: 18),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     'Full Name',
                     style: TextStyle(
                       color: Color(0xFF525FE1),
@@ -193,32 +195,32 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: fullname,
                     decoration: InputDecoration(
                       hintText: 'Your splendid name here ',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Color(0x7F525FE1),
                           fontFamily: 'Alumni Sans',
                           fontWeight: FontWeight.w100,
                           fontSize: 18),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     'New Password',
                     style: TextStyle(
                       color: Color(0xFF525FE1),
@@ -231,37 +233,37 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       hintText: 'Secret here',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Color(0x7F525FE1),
                           fontFamily: 'Alumni Sans',
                           fontWeight: FontWeight.w100,
                           fontSize: 18),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       suffixIcon: IconButton(
                           onPressed: toggleicon,
                           icon: eyeicon,
-                          color: Color(0xff525FE1)),
+                          color: const Color(0xff525FE1)),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                     obscureText: visible,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
-                  Text(
+                  const Text(
                     'Re-type Password',
                     style: TextStyle(
                       color: Color(0xFF525FE1),
@@ -274,34 +276,34 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: retypepasswordController,
                     decoration: InputDecoration(
                       hintText: 'Secret again here',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Color(0x7F525FE1),
                           fontFamily: 'Alumni Sans',
                           fontWeight: FontWeight.w100,
                           fontSize: 18),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       suffixIcon: IconButton(
                           onPressed: toggleicon1,
                           icon: eyeicon1,
-                          color: Color(0xff525FE1)),
+                          color: const Color(0xff525FE1)),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                     obscureText: visible1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
@@ -312,12 +314,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       width: double.infinity,
                       height: 45,
                       decoration: ShapeDecoration(
-                        color: Color(0xFFFF6B00),
+                        color: const Color(0xFFFF6B00),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Create account',
                           style: TextStyle(

@@ -19,10 +19,10 @@ class _ForgotPaasswordPageState extends State<ForgotPaasswordPage> {
               height: MediaQuery.of(context).size.height * 0.4,
             ),
             Image.asset('assets/Group 12.png'),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
-            Text.rich(
+            const Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
@@ -79,7 +79,7 @@ class _ForgotPaasswordPageState extends State<ForgotPaasswordPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Email address',
                     style: TextStyle(
                       color: Color(0xFF525FE1),
@@ -91,41 +91,41 @@ class _ForgotPaasswordPageState extends State<ForgotPaasswordPage> {
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'Your awesome email here',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Color(0x7F525FE1),
                           fontFamily: 'Alumni Sans',
                           fontWeight: FontWeight.w100,
                           fontSize: 18),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide:
-                            BorderSide(width: 1, color: Color(0xFF525FE1)),
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFF525FE1)),
                       ),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 17,
                     ),
-                    cursorColor: Color(0xFF525FE1),
+                    cursorColor: const Color(0xFF525FE1),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
                     width: double.infinity,
                     height: 45,
                     decoration: ShapeDecoration(
-                      color: Color(0xFFFF6B00),
+                      color: const Color(0xFFFF6B00),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Get Link',
                         style: TextStyle(

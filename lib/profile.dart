@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:blug/providerclass.dart';
@@ -7,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+//intl
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  Widget postcard(String body, String image) {
+  Widget postcard(String body, String image, DateTime timestamp) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
       child: Container(
@@ -27,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x3F525FE1),
               blurRadius: 27,
@@ -51,9 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '21/07/2053',
+                            DateFormat('dd/MM/yyyy').format(timestamp),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                               fontFamily: 'Alumni Sans',
@@ -61,8 +65,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Text(
-                            '11:11 PM',
-                            style: TextStyle(
+                            DateFormat('hh:mm a').format(timestamp),
+                            style: const TextStyle(
                               color: Color(0xFFFF6B00),
                               fontSize: 13,
                               fontFamily: 'Alumni Sans',
@@ -76,26 +80,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 body,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 18,
                   fontFamily: 'Alumni Sans',
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Container(
                 width: double.infinity,
                 height: 95,
                 decoration: ShapeDecoration(
-                  color: Color(0xFFD9D9D9),
+                  color: const Color(0xFFD9D9D9),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)),
                 ),
@@ -120,6 +124,21 @@ class _ProfilePageState extends State<ProfilePage> {
     fetchUserData();
   }
 
+  int postCount = 0;
+
+  void fetchPostCount() {
+    int count = 0;
+    final postsProvider = Provider.of<PostsProvider>(context);
+    for (int i = 0; i < postsProvider.post.length; i++) {
+      if (postsProvider.post[i].username == username) {
+        count++;
+      }
+    }
+    setState(() {
+      postCount = count;
+    });
+  }
+
   Future<void> fetchUserData() async {
     if (email != null) {
       DocumentSnapshot doc = await FirebaseFirestore.instance
@@ -135,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User data not found')),
+          const SnackBar(content: Text('User data not found')),
         );
       }
     }
@@ -173,7 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }, SetOptions(merge: true));
 
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Profile image updated successfully!')));
+          const SnackBar(content: Text('Profile image updated successfully!')));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to update profile image: $e')));
@@ -184,11 +203,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Image.asset(
-            'assets/Group 3.png',
-            height: 25,
-          ),
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: Image.asset(
+          'assets/Group 3.png',
+          height: 25,
         ),
         backgroundColor:
             Colors.transparent, // Set background color to transparent
@@ -204,18 +223,17 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Stack(
                       children: [
-                        //give an edit image
-
                         GestureDetector(
                           onTap: _pickImage,
                           child: Container(
                             width: 90,
                             height: 90,
                             decoration: ShapeDecoration(
-                              color: Color(0xFFD9D9D9),
+                              color: const Color(0xFFD9D9D9),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(60),
                               ),
@@ -224,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               borderRadius: BorderRadius.circular(60),
                               child: _image == null
                                   ? profile == null
-                                      ? Icon(
+                                      ? const Icon(
                                           Icons.add,
                                           color: Colors.white,
                                           size: 35,
@@ -241,11 +259,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Container(
                             width: 30,
                             height: 30,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Color.fromARGB(255, 246, 131, 50),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.edit,
                               color: Colors.white,
                               size: 20,
@@ -254,52 +272,47 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          name ?? 'user',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Text(
-                          username ?? 'username',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFFFF6B00),
-                            fontSize: 19,
-                            fontFamily: 'Alumni Sans',
-                            fontWeight: FontWeight.w300,
-                            height: 0.04,
-                          ),
-                        )
-                      ],
-                    ),
-
-                    // postcard(),
-                  ],
-                ),
-                Column(
-                  children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Image.asset('assets/settings.png'),
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name ?? 'user',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontFamily: 'Alumni Sans',
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            username ?? 'username',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Color(0xFFFF6B00),
+                              fontSize: 19,
+                              fontFamily: 'Alumni Sans',
+                              fontWeight: FontWeight.w300,
+                              height: 0.04,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
@@ -307,7 +320,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: 'Posts ',
                     style: TextStyle(
                       color: Color(0xFFFF6B00),
@@ -317,8 +330,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   TextSpan(
-                    text: '19',
-                    style: TextStyle(
+                    text: Provider.of<PostsProvider>(context).postCount,
+                    style: const TextStyle(
                       color: Color(0xFF525FE1),
                       fontSize: 18,
                       fontFamily: 'Alumni Sans',
@@ -329,7 +342,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 19,
           ),
           //call postcard() function for post with username=username from provider
@@ -342,8 +355,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     username) {
                   return postcard(
                       Provider.of<PostsProvider>(context).post[index].body,
-                      Provider.of<PostsProvider>(context).post[index].image);
+                      Provider.of<PostsProvider>(context).post[index].image,
+                      Provider.of<PostsProvider>(context)
+                          .post[index]
+                          .timestamp);
                 }
+                return null;
               },
             ),
           )

@@ -25,11 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Spacer(),
+          const Spacer(),
           Image.asset('assets/Group 61.png'),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 80),
+          const Spacer(),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 80),
             child: Text(
               'BLUG',
               style: TextStyle(

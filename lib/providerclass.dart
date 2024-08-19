@@ -6,6 +6,7 @@ class Posts {
   final String body;
   final String image;
   final String profile;
+  final DateTime timestamp;
 
   Posts({
     required this.username,
@@ -13,13 +14,20 @@ class Posts {
     required this.body,
     required this.image,
     required this.profile,
+    required this.timestamp,
   });
 }
 
 class PostsProvider with ChangeNotifier {
   final List<Posts> postdata = [];
+  String postCount = '0';
   void addPost(Posts post) {
     postdata.add(post);
+    notifyListeners();
+  }
+
+  void setCount(String count) {
+    postCount = count;
     notifyListeners();
   }
 

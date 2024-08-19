@@ -1,5 +1,4 @@
 import 'package:blug/signin.dart';
-import 'package:blug/signup.dart';
 import 'package:flutter/material.dart';
 
 class GetStartedPage extends StatefulWidget {
@@ -15,7 +14,11 @@ class _GetStartedPageState extends State<GetStartedPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset('assets/Group 21.png'),
+          Image.asset(
+            'assets/Group 21.png',
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,8 +27,8 @@ class _GetStartedPageState extends State<GetStartedPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.15,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
+              const Padding(
+                padding: EdgeInsets.only(left: 30),
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -51,7 +54,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -60,16 +63,16 @@ class _GetStartedPageState extends State<GetStartedPage> {
                   Container(
                     width: 135,
                     height: 1,
-                    decoration: BoxDecoration(color: Color(0xFF525FE1)),
+                    decoration: const BoxDecoration(color: Color(0xFF525FE1)),
                   ),
                   Container(
                     width: 135,
                     height: 1,
-                    decoration: BoxDecoration(color: Color(0xFFFF6B00)),
+                    decoration: const BoxDecoration(color: Color(0xFFFF6B00)),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Padding(
@@ -86,7 +89,8 @@ class _GetStartedPageState extends State<GetStartedPage> {
                     height: 45,
                     decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(width: 1, color: Color(0xFFFF6B00)),
+                        side: const BorderSide(
+                            width: 1, color: Color(0xFFFF6B00)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -95,10 +99,10 @@ class _GetStartedPageState extends State<GetStartedPage> {
                       child: Row(
                         children: [
                           Image.asset('assets/mail.png'),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
-                          Text(
+                          const Text(
                             'Continue with Email',
                             style: TextStyle(
                               color: Color(0xFFFF6B00),
